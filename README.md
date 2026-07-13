@@ -1,6 +1,6 @@
 # Lab M2.02 - SSH Connection and Security Best Practices
 
-**Repository:** [https://github.com/cloud-engineering-bootcamp/ce-lab-ssh-connection-security](https://github.com/cloud-engineering-bootcamp/ce-lab-ssh-connection-security)
+**Repository:** [https://github.com/cloud-engineering-bootcamp/ce-lab-ssh-security](https://github.com/cloud-engineering-bootcamp/ce-lab-ssh-security)
 
 **Activity Type:** Individual  
 **Estimated Time:** 30-45 minutes
