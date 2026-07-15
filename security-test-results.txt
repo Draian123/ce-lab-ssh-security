@@ -1,0 +1,19 @@
+## Test Results
+
+**SSH Connection:**
+✅ Successfully connected to EC2 instance
+- User: ec2-user
+- Instance IP: 54.91.124.175
+- Instance Hostname: ip-172-31-22-250
+
+**HTTP/Apache Web Server:**
+✅ Web server running and responding
+```bash
+curl -I http://54.91.124.175
+HTTP/1.1 200 OK
+Server: Apache/2.4.68 (Amazon Linux)
+Content-Length: 127
+```
+
+**Connectivity Tests:**
+✅ Instance is reachable and responding to requests

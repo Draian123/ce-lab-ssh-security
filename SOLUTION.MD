@@ -1,14 +1,14 @@
 # SSH Connection and Security Best Practices Lab - Solution
 
-**Student Name:** [Your Name]  
-**Date Completed:** [Date]
+**Student Name:** [Dennis]  
+**Date Completed:** [14.07]
 
 ---
 
 ## Instance Details
 
-- **Instance ID:** [i-xxxxxxxxxxxxx]
-- **Public IP:** [x.x.x.x — redact if repo is public]
+- **Instance ID:** [i-0f0f2f47563926f55]
+- **Public IP:** [54.91.124.175]
 - **Security Group:** [week2-web-server-sg]
 - **Key Pair:** [bootcamp-week2-key.pem]
 
@@ -20,10 +20,19 @@
 
 **My `~/.ssh/config`:**
 ```
+# Week 2 EC2 Instance
+Host bootcamp-web
+    HostName 54.91.124.175
+    User ec2-user
+    IdentityFile ~/.ssh/bootcamp-week2-key.pem
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    TCPKeepAlive yes
+    Compression yes
 [Paste your host entry here]
 ```
 
-- [ ] Connected using the alias: `ssh bootcamp-web`
+- [ x] Connected using the alias: `ssh bootcamp-web`
 
 ---
 
@@ -33,14 +42,14 @@
 
 | Test | Expected | Result |
 |------|----------|--------|
-| `ssh bootcamp-web` | ✅ Connects | [ ] |
-| `curl -I http://YOUR_PUBLIC_IP` | ✅ HTTP 200 | [ ] |
-| `ping YOUR_PUBLIC_IP` | ❌ Timeout | [ ] |
-| `nc -zv YOUR_PUBLIC_IP 3306` | ❌ Blocked | [ ] |
+| `ssh bootcamp-web` | ✅ Connects | [x ] |
+| `curl -I http://YOUR_PUBLIC_IP` | ✅ HTTP 200 | [ x] |
+| `ping YOUR_PUBLIC_IP` | ❌ Timeout | [x ] |
+| `nc -zv YOUR_PUBLIC_IP 3306` | ❌ Blocked | [x ] |
 
 **Why did ping and port 3306 fail?**
 
-[Your answer]
+yes ping failed
 
 ---
 
@@ -48,9 +57,9 @@
 
 ![Security Group Edit](Screenshots/security-group-edit.png)
 
-- [ ] Added HTTPS rule (port 443, source 0.0.0.0/0)
-- [ ] Tested it — what happened? [Your answer]
-- [ ] Removed the HTTPS rule again
+- [ x] Added HTTPS rule (port 443, source 0.0.0.0/0)
+- [x ] Tested it — what happened? [Your answer]
+- [x ] Removed the HTTPS rule again
 
 ---
 
@@ -58,13 +67,13 @@
 
 **What these settings do:**
 
-- `ServerAliveInterval 60` — [Your answer]
-- `ServerAliveCountMax 3` — [Your answer]
-- `TCPKeepAlive yes` — [Your answer]
-- `Compression yes` — [Your answer]
+- `ServerAliveInterval 60` —Sends a keepalive message to the server every 60 seconds to help keep the SSH connection active.
+- `ServerAliveCountMax 3` — Allows 3 unanswered keepalive messages before the SSH client disconnects the session.
+- `TCPKeepAlive yes` — Enables TCP keepalive packets to detect broken network connections and maintain the connection.
+- `Compression yes` — Enables data compression during the SSH session, which can improve performance on slower network connections.
 
 **Idle for 2 minutes — did the connection stay alive?** [Yes / No]
-
+yes
 ---
 
 ## Step 5: Practice SCP (Secure Copy)
@@ -78,6 +87,12 @@
 **Commands I used:**
 ```bash
 [Paste your scp commands here]
+cat > ~/instance-info.txt <<EOF
+Instance: $(hostname)
+User: $(whoami)
+Date: $(date)
+EOF
+draian@MSI:~$ scp bootcamp-web:~/instance-info.txt ./downloaded-info.txt
 ```
 
 ---
@@ -108,7 +123,7 @@
 [Paste your script here]
 ```
 
-- [ ] Made it executable and tested it
+- [ x] Made it executable and tested it
 
 ---
 
@@ -124,6 +139,15 @@
 | [80] | [0.0.0.0/0] | [Web traffic] |
 
 **Is this configuration secure? What would you improve?**
+IssueCurrentRecommendationSSH (22)✅ Restricted to your IP/32Good—keep thisHTTP (80)⚠️ Open to 0.0.0.0/0Fine for web servers, but add HTTPSHTTPS (443)❌ MissingAdd rule: 443 from 0.0.0.0/0Outbound❌ Not shownCheck—should allow HTTPS out (443) for updates
+
+Quick improvements:
+
+Add port 443 inbound from 0.0.0.0/0 (for HTTPS traffic)
+Consider adding port 443 and 80 outbound if needed for server updates
+Keep SSH restricted to your IP—that's the right call
+
+If web server only: This config is reasonable. Port 80 must be open for web traffic, and SSH restricted to your IP is solid.
 
 [Your answer]
 
@@ -132,6 +156,7 @@
 ## Step 9: Troubleshooting
 
 **Problems I ran into and how I fixed them:**
+Claude
 
 [List them here, or write "None encountered"]
 
@@ -141,8 +166,9 @@
 
 **Which advanced practices did you try or read about (custom SSH port, MFA, session logging)?**
 
-[Your answer]
-
+Custom SSH port – Reducing attack surface by moving from port 22 to non-standard port
+SSH session logging – Reviewing /var/log/auth.log to track login attempts and who accessed the server
+MFA via TOTP – Adding second-factor authentication beyond SSH keys (Google Authenticator)
 ---
 
 ## Bonus Challenges (Optional)
